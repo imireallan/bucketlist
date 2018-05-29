@@ -37,7 +37,7 @@ class BucketlistTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 201)
         json_result = json.loads(res.data.decode("utf-8").replace("'", "\""))
         res = self.client.get(
-            "/bucketlist/{}".format(json_result["id"])
+            "/bucketlists/{}".format(json_result["id"])
         )
         self.assertEqual(res.status_code, 200)
         self.assertIn("Visit Stamford", str(res.data))
@@ -60,8 +60,8 @@ class BucketlistTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 201)
         res = self.client.delete("/bucketlists/1")
         self.assertEqual(res.status_code, 200)
-        rv = self.client.get("/bucketlists/")
-        self.assertEqual(res.status_code, 404)
+        rv = self.client.get("/bucketlists/1")
+        self.assertEqual(rv.status_code, 404)
 
     def tearDown(self):
         """Remove all the test variables"""

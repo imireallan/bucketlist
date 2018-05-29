@@ -32,12 +32,12 @@ def create_app(config_name):
         response.status_code = 201
         return response
 
-    @app.route("/bucketlists", methods=["GET"])
+    @app.route("/bucketlists/", methods=["GET"])
     def get_all_bucketlists():
-        bucketlists = bucketlist.get_all()
+        bucketlists = Bucketlist.get_all()
         if not bucketlists:
             abort(404)
-            return make_response(jsonify({"message": "bucketlist not found"}), 404)
+
         results = []
         for bucketlist in bucketlists:
             obj = {
@@ -49,6 +49,49 @@ def create_app(config_name):
             results.append(obj)
         response = jsonify(results)
         response.status_code = 200
+        return response
+
+    @app.route("/bucketlists/<int:id>", methods=["GET"])
+    def get_one_bucketlist(id):
+        bucketlist = Bucketlist.query.filter_by(id=id).first()
+        if not bucketlist:
+            abort(404)
+
+        response = jsonify({
+            "id": bucketlist.id,
+            "name": bucketlist.name,
+            "date_created": bucketlist.date_created,
+            "date_modified": bucketlist.date_modified
+        })
+        response.status_code = 200
+        return response
+
+    @app.route("/bucketlists/<int:id>", methods=["PUT"])
+    def edit_bucketlist(id):
+        bucketlist = Bucketlist.query.filter_by(id=id).first()
+        if not bucketlist:
+            abort(404)
+
+        name = str(request.data.get("name", ""))
+        bucketlist.name = name
+        bucketlist.save()
+        response = jsonify({
+            "id": bucketlist.id,
+            "name": bucketlist.name,
+            "date_created": bucketlist.date_created,
+            "date_modified": bucketlist.date_modified
+        })
+        response.status_code = 200
+        return response
+
+    @app.route("/bucketlists/<int:id>", methods=["DELETE"])
+    def delete_bucketlist(id):
+        bucketlist = Bucketlist.query.filter_by(id=id).first()
+        if not bucketlist:
+            abort(404)
+
+        bucketlist.delete()
+        response = make_response(jsonify({"message": "bucketlist {} deleted successfully".format(bucketlist.id)}),200)
         return response
 
 
