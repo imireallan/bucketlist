@@ -32,5 +32,25 @@ def create_app(config_name):
         response.status_code = 201
         return response
 
+    @app.route("/bucketlists", methods=["GET"])
+    def get_all_bucketlists():
+        bucketlists = bucketlist.get_all()
+        if not bucketlists:
+            abort(404)
+            return make_response(jsonify({"message": "bucketlist not found"}), 404)
+        results = []
+        for bucketlist in bucketlists:
+            obj = {
+                "id": bucketlist.id,
+                "name": bucketlist.name,
+                "date_created": bucketlist.date_created,
+                "date_modified": bucketlist.date_modified
+            }
+            results.append(obj)
+        response = jsonify(results)
+        response.status_code = 200
+        return response
+
+
 
     return app
