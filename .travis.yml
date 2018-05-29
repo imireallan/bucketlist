@@ -7,7 +7,7 @@ install:
 # command to run tests
 
 script:
-  - python test_bucketlist.py --with-coverage --cover-package=tests  && coverage report
+  - python test_bucketlist.py
 
 after-success:
   - coveralls
