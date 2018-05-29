@@ -19,7 +19,7 @@ class ProductonConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI_TEST")
+    SQLALCHEMY_DATABASE_URI = "sqlite:////home/imire/Desktop/Projects/bucketlist/test.db"
 
 app_config = {
     "development": DevelopmentConfig,
