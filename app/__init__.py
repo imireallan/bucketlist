@@ -67,25 +67,25 @@ def create_app(config_name):
         response.status_code = 200
         return response
 
-        @app.route("/bucketlists/<int:id>", methods="PUT")
-        def update_one(id):
-            bucketlist = Bucketlist.query.filter_by(id=id).first()
-            if not bucketlist:
-                abort(404)
-                return make_response(jsonify({"message":"bucketlist with id {} not found".format(bucketlist.id)}), 404)
-            
-            name = str(request.data.get("name", ""))
-            bucketlist.name = name
-            bucketlist.save()
+    @app.route("/bucketlists/<int:id>", methods="PUT")
+    def update_one(id):
+        bucketlist = Bucketlist.query.filter_by(id=id).first()
+        if not bucketlist:
+            abort(404)
+            return make_response(jsonify({"message":"bucketlist with id {} not found".format(bucketlist.id)}), 404)
+        
+        name = str(request.data.get("name", ""))
+        bucketlist.name = name
+        bucketlist.save()
 
-            response = jsonify({
-                "id": bucketlist.id,
-                "name": bucketlist.name,
-                "date_created": bucketlist.date_created,
-                "date_modified": bucketlist.date_modified
-            })
-            response.status_code = 200
-            return response
+        response = jsonify({
+            "id": bucketlist.id,
+            "name": bucketlist.name,
+            "date_created": bucketlist.date_created,
+            "date_modified": bucketlist.date_modified
+        })
+        response.status_code = 200
+        return response
 
 
 
