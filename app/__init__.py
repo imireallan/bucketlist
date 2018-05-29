@@ -11,7 +11,7 @@ db = SQLAlchemy()
 
 def create_app(config_name):
     """Instantiating the app and its configurations"""
-    from models import Bucketlist
+    from app.models import Bucketlist
     app = FlaskAPI(__name__, instance_relative_config=True)
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile("config.py")
@@ -67,26 +67,33 @@ def create_app(config_name):
         response.status_code = 200
         return response
 
-        @app.route("/bucketlists/<int:id>", methods="PUT")
-        def update_one(id):
-            bucketlist = Bucketlist.query.filter_by(id=id).first()
-            if not bucketlist:
-                abort(404)
-                return make_response(jsonify({"message":"bucketlist with id {} not found".format(bucketlist.id)}), 404)
-            
-            name = str(request.data.get("name", ""))
-            bucketlist.name = name
-            bucketlist.save()
+    @app.route("/bucketlists/<int:id>", methods="PUT")
+    def update_one(id):
+        bucketlist = Bucketlist.query.filter_by(id=id).first()
+        if not bucketlist:
+            abort(404)
+            return make_response(jsonify({"message":"bucketlist with id {} not found".format(bucketlist.id)}), 404)
+        
+        name = str(request.data.get("name", ""))
+        bucketlist.name = name
+        bucketlist.save()
 
-            response = jsonify({
-                "id": bucketlist.id,
-                "name": bucketlist.name,
-                "date_created": bucketlist.date_created,
-                "date_modified": bucketlist.date_modified
-            })
-            response.status_code = 200
-            return response
+        response = jsonify({
+            "id": bucketlist.id,
+            "name": bucketlist.name,
+            "date_created": bucketlist.date_created,
+            "date_modified": bucketlist.date_modified
+        })
+        response.status_code = 200
+        return response
 
+    @app.route("/bucketlists/<int:id>", methods=["DELETE"])
+    def delete_bucketlist(id):
+        bucketlist = Bucketlist.query.filter_by(id=id).first()
+        if not bucketlist:
+            abort(404)
+            return make_response(jsonify({"message":"bucketlist with id {} not found".format(bucketlist.id)}), 404)
 
-
+        bucketlist.delete()
+        return make_response(jsonify({"message": "bucketlist with id {} deleted successfully".format(bucketlist.id)}), 200)
     return app
