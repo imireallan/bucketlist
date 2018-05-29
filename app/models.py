@@ -49,7 +49,7 @@ class Bucketlist(db.Model):
     created_by = db.Column(db.Integer, db.ForeignKey(User.id))
 
     def __init__(self, name, created_by):
-        """Initialize the bucketlist with a name and the owner""""
+        """Initialize the bucketlist with a name and the owner"""
         self.name = name
         self.created_by = created_by
 
