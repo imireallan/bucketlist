@@ -51,6 +51,22 @@ def create_app(config_name):
         response.status_code = 200
         return response
 
+    @app.route("/bucketlists/<int:id>", methods="GET")
+    def get_one(id):
+        bucketlist = Bucketlist.query.filter_by(id=id).first()
+        if not bucketlist:
+            abort(404)
+            return make_response(jsonify({"message":"bucketlist with id {} not found".format(bucketlist.id)}), 404)
+
+        response = jsonify({
+            "id": bucketlist.id,
+            "name": bucketlist.name,
+            "date_created": bucketlist.date_created,
+            "date_modified": bucketlist.date_modified
+        })
+        response.status_code = 200
+        return response
+
 
 
     return app
