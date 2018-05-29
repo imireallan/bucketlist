@@ -1,3 +1,4 @@
+import os
 import json
 import unittest
 from app import create_app, db
@@ -8,7 +9,7 @@ class BucketlistTestCase(unittest.TestCase):
     def setUp(self):
         """Define test variables and initialize app"""
 
-        self.app = create_app(config_name="testing")
+        self.app = create_app(config_name=os.getenv("DATABASE_URI_TEST"))
         self.client = self.app.test_client()
         self.bucketlist = {"name": "Visit Stamford Bridge"} 
 
