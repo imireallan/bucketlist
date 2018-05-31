@@ -19,7 +19,7 @@ class ProductonConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = "postgresql://localhost/test_db"
+    SQLALCHEMY_DATABASE_URI = "postgresql://imire:pass@word1@localhost/test"
 
 app_config = {
     "development": DevelopmentConfig,
