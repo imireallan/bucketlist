@@ -1,0 +1,19 @@
+language: python
+python:
+  - "3.5"
+services:
+  - postgresql
+# command to install dependencies
+install:
+  - pip install -r requirements.txt
+  - pip install coveralls
+# command to run tests
+
+before_script:
+  - psql -c 'create database test_db;' -U postgres
+
+script:
+  - nosetests --with-coverage
+
+after-success:
+  - coveralls
